@@ -1,3 +1,8 @@
+/**
+ * Component: HomePage
+ * 
+ * Main page
+ */
 import { Link } from 'react-router-dom';
 
 function HomePage() {
@@ -7,6 +12,7 @@ function HomePage() {
       <nav>
         <ul>
           <li><Link to="/moods">Moods</Link></li>
+          <li><Link to="/login">Login</Link></li>
         </ul>
       </nav>
     </div>

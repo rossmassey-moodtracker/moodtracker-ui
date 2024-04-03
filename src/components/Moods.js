@@ -1,11 +1,7 @@
 /**
  * Component: Moods
  * 
- * Description:
  * Lists all the user's logged moods
- * 
- * Example Usage:
- * <Moods />
  */
 import { useEffect, useState } from 'react';
 import { API_BASE_URL } from '../config.js';
@@ -63,8 +59,9 @@ function Moods() {
 
     return (
         <div>
+            <h1>Moods</h1>
             {moods.map(mood => (
-                <div key={mood.id}>{mood.time}: {mood.mood}</div>
+                <div key={mood.id}>{formatTime(mood.time)}: {mood.mood}</div>
             ))}
         </div>
     );

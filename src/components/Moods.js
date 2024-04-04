@@ -41,7 +41,7 @@ function Moods() {
             try {
                 // call API with token for user's moods
                 const token = getToken();
-                const response = await fetch(`${API_BASE_URL}/moods/`, {
+                const response = await fetch(`${API_BASE_URL}/api/moods/`, {
                     headers: { 'Authorization': `Token ${token}` }
                 });
     

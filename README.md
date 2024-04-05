@@ -2,6 +2,9 @@
 
 React frontend
 
+## Requirements
+- Node v14
+
 ## Local Environment Setup
 
 ```bash

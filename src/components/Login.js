@@ -3,9 +3,6 @@
  * 
  * Authenticate user and grab token
  */
-import { useState } from 'react';
-import { setToken } from '../services/auth';
-
 function Login() {
 
     return (

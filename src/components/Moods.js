@@ -1,19 +1,15 @@
 /**
  * Component: Moods
- * 
+ *
  * Lists all the user's logged moods
  */
 import { useEffect, useState } from 'react';
 import { API_BASE_URL } from '../config.js';
-// import { getToken } from 'auth';
-// TODO
-function getToken() {
-    return '11356283f5bf9152bd4abc5d376868cfb9c50f64'
-}
+import axios from "axios";
 
 /**
  * convert to readable date string
- * 
+ *
  * @param {string} dateString - the ISO 8601 formatted date
  * @returns a more readable date
  */
@@ -39,21 +35,16 @@ function Moods() {
          */
         const fetchMoods = async () => {
             try {
-                // call API with token for user's moods
-                const token = getToken();
-                const response = await fetch(`${API_BASE_URL}/api/moods/`, {
-                    headers: { 'Authorization': `Token ${token}` }
-                });
-    
-                // set moods if API call success
-                if (response.ok) {
-                    const data = await response.json()
-                    setMoods(data.results)
+                const response = await axios.get(`${API_BASE_URL}/api/moods/`);
+
+                if (response.status === 200) {
+                    setMoods(response.data.results);
                 }
             } catch (error) {
                 console.error('ERROR:', error.message);
             }
         };
+
         fetchMoods();
     }, []);
 

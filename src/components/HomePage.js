@@ -1,22 +1,32 @@
 /**
  * Component: HomePage
- * 
+ *
  * Main page
  */
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
+import { useContext } from "react";
 
-function HomePage() {
-  return (
-    <div>
-      <h1>Moodtracker UI</h1>
-      <nav>
-        <ul>
-          <li><Link to="/moods">Moods</Link></li>
-          <li><Link to="/login">Login</Link></li>
-        </ul>
-      </nav>
-    </div>
-  );
+const HomePage = () => {
+    const { isAuthenticated } = useContext(AuthContext);
+
+    return (
+        <home>
+            <h1>Moodtracker</h1>
+            <p>This site lets you track your mood over time!</p>
+            {isAuthenticated ? (
+                <div>
+                    <Link to="/moods">Moods</Link>
+                </div>
+            ) : (
+                <div>
+                    <p>You are not logged in, <Link to="/login">login here</Link></p>
+                </div>
+
+            )}
+        </home>
+    );
 }
+
 
 export default HomePage;

@@ -6,8 +6,8 @@ import '@testing-library/jest-dom';
 
 // mock fetch, or else jest test will complain
 global.fetch = jest.fn(() =>
-  Promise.resolve({
-    ok: true,
-    json: () => Promise.resolve({ results: [] }),
-  })
+    Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ results: [] }),
+    })
 );

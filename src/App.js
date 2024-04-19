@@ -1,21 +1,30 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import './App.css';
 
 import Moods from './components/Moods';
 import HomePage from './components/HomePage';
 import Login from './components/Login';
+import PrivateRoute from './components/PrivateRoute';
+
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/moods" element={<Moods />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </Router>
-  );
+    return (
+        <AuthProvider>
+            <Router>
+                <Routes>
+                    <Route path="/" element={<HomePage/>}/>
+                    <Route path="/login" element={<Login/>}/>
+                    <Route path="/moods" element={
+                        <PrivateRoute>
+                            <Moods/>
+                        </PrivateRoute>
+                    }/>
+                </Routes>
+            </Router>
+        </AuthProvider>
+    );
 }
 
 export default App;

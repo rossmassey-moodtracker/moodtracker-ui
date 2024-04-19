@@ -13,11 +13,13 @@ import { API_BASE_URL } from '../config.js';
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
     const { setIsAuthenticated } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleLogin = async (event) => {
         event.preventDefault();
+        setLoading(true);
         try {
             const response = await axios.post(`${API_BASE_URL}/login/`, { username, password });
             const { token } = response.data;
@@ -27,8 +29,14 @@ const Login = () => {
             navigate('/');
         } catch (error) {
             console.error('Login failed:', error.response?.data || 'No response');
+        } finally {
+            setLoading(false);
         }
     };
+
+    if (loading) {
+        return <div>Logging in...</div>;
+    }
 
     return (
         <form onSubmit={handleLogin}>

@@ -1,3 +1,8 @@
+/**
+ * Component: HomePage
+ *
+ * Main entrypoint to app and provides login/logout
+ */
 import { useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
@@ -46,7 +51,7 @@ const HomePage = () => {
             <AuthBar>
                 {isAuthenticated ? (
                     <>
-                        <span>Logged in as {authenticatedUser}</span>
+                        <span>Logged in as <strong>{authenticatedUser}</strong></span>
                         <Button onClick={handleLogout} variant="contained" color="secondary">Log out</Button>
                     </>
                 ) : (
@@ -78,7 +83,7 @@ const AuthenticatedView = () => (
 );
 
 const UnauthenticatedView = () => (
-    <p>To start tracking your mood, please log in.</p>
+    <p>Please log in</p>
 );
 
 export default HomePage;

@@ -6,14 +6,14 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
-import { logOut } from '../services/auth';
+import { clearAuthStorage } from '../services/auth';
 
 const HomePage = () => {
     const { isAuthenticated, setIsAuthenticated, authenticatedUser } = useContext(AuthContext);
 
     const handleLogout = async () => {
         setIsAuthenticated(false);
-        await logOut();
+        clearAuthStorage();
     };
 
     return (

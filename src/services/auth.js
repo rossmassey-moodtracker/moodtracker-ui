@@ -90,9 +90,9 @@ export const authenticateUser = async (username, password) => {
 };
 
 /**
- * log out
+ * log out by removing token from request header and clearing stored auth info
  */
-export const logOut = () => {
+export const clearAuthStorage = () => {
     clearAxiosHeader();
     removeAllAuthFromStorage();
 };

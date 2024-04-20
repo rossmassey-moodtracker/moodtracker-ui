@@ -6,9 +6,15 @@
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import { useContext } from 'react';
+import { logOut } from '../services/auth';
 
 const HomePage = () => {
-    const { isAuthenticated, authenticatedUser } = useContext(AuthContext);
+    const { isAuthenticated, setIsAuthenticated, authenticatedUser } = useContext(AuthContext);
+
+    const handleLogout = async (event) => {
+        setIsAuthenticated(false);
+        logOut();
+    };
 
     return (
         <div>
@@ -18,6 +24,9 @@ const HomePage = () => {
                 <div>
                     <p>You are logged in as {authenticatedUser}!</p>
                     <Link to="/moods">Moods</Link>
+                    <div style={{ paddingTop: '10px' }}>
+                        <button onClick={handleLogout}>Log out</button>
+                    </div>
                 </div>
             ) : (
                 <div>

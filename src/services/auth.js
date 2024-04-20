@@ -29,7 +29,7 @@ export const loadAuth = () => {
 /**
  * removes all auth from local storage
  */
-export const removeAll = () => {
+export const removeAllAuthFromStorage = () => {
     localStorage.removeItem(TOKEN_STORAGE_KEY);
     localStorage.removeItem(USERNAME_STORAGE_KEY);
     localStorage.removeItem(EMAIL_STORAGE_KEY);
@@ -44,8 +44,20 @@ export const storeUserInfo = (token, user, email) => {
     localStorage.setItem(EMAIL_STORAGE_KEY, email);
 };
 
+/**
+ * sets the Authorization header for axios
+ *
+ * @param {string} token - token to use
+ */
 export const setAxiosHeader = (token) => {
     axios.defaults.headers.common['Authorization'] = `Token ${token}`;
+};
+
+/**
+ * clears the Authorization header for axios
+ */
+export const clearAxiosHeader = () => {
+    delete axios.defaults.headers.common['Authorization'];
 };
 
 /**
@@ -75,4 +87,12 @@ export const authenticateUser = async (username, password) => {
         console.error('Authentication failed:', error.response?.data || 'No response');
         return { error: error.response?.data || 'No response' };
     }
+};
+
+/**
+ * log out
+ */
+export const logOut = () => {
+    clearAxiosHeader();
+    removeAllAuthFromStorage();
 };

@@ -23,11 +23,11 @@ export const AuthProvider = ({ children }) => {
             console.log('Authenticating with stored token');
             const { token, user, email } = auth;
 
+            setAuthenticatedUser(user);
+            setAuthenticatedEmail(email);
             setIsAuthenticated(true);
 
             setAxiosHeader(token);
-            setAuthenticatedUser(user);
-            setAuthenticatedEmail(email);
         } else {
             console.log('Stored token not found');
         }
@@ -37,7 +37,15 @@ export const AuthProvider = ({ children }) => {
     return (
         // passes these values to all children
         <AuthContext.Provider
-            value={{ setIsAuthenticated, isAuthenticated, tokenLoading, authenticatedUser, authenticatedEmail }}>
+            value={{
+                setIsAuthenticated,
+                isAuthenticated,
+                tokenLoading,
+                setAuthenticatedUser,
+                authenticatedUser,
+                setAuthenticatedEmail,
+                authenticatedEmail,
+            }}>
             {children}
         </AuthContext.Provider>
     );

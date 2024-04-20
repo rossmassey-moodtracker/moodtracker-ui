@@ -5,17 +5,18 @@
  */
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
-import { useContext } from "react";
+import { useContext } from 'react';
 
 const HomePage = () => {
-    const { isAuthenticated } = useContext(AuthContext);
+    const { isAuthenticated, authenticatedUser } = useContext(AuthContext);
 
     return (
-        <home>
+        <div>
             <h1>Moodtracker</h1>
             <p>This site lets you track your mood over time!</p>
             {isAuthenticated ? (
                 <div>
+                    <p>You are logged in as {authenticatedUser}!</p>
                     <Link to="/moods">Moods</Link>
                 </div>
             ) : (
@@ -24,9 +25,9 @@ const HomePage = () => {
                 </div>
 
             )}
-        </home>
+        </div>
     );
-}
+};
 
 
 export default HomePage;

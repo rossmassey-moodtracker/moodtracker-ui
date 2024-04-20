@@ -5,7 +5,7 @@
  */
 import { useEffect, useState } from 'react';
 import { API_BASE_URL } from '../config.js';
-import axios from "axios";
+import axios from 'axios';
 
 /**
  * convert to readable date string
@@ -20,7 +20,7 @@ function formatTime(dateString) {
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit'
+        second: '2-digit',
     };
     return new Date(dateString).toLocaleDateString('en-US', options);
 }

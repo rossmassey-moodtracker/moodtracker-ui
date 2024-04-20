@@ -3,39 +3,76 @@
  *
  * Handles token storage and API request header in axios
  */
-import axios from "axios";
+import axios from 'axios';
+import { API_BASE_URL } from '../config.js';
 
 const TOKEN_STORAGE_KEY = 'authToken';
+const USERNAME_STORAGE_KEY = 'authUser';
+const EMAIL_STORAGE_KEY = 'authEmail';
 
 /**
- * stores the authentication token in localStorage
+ * loads the authentication token from localStorage
  *
- * @param {string} token - the token
+ * @returns {Object | null} the token, or null if not found
  */
-export const setToken = (token) => {
-    localStorage.setItem(TOKEN_STORAGE_KEY, token);
+export const loadAuth = () => {
+    const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+    const user = localStorage.getItem(USERNAME_STORAGE_KEY);
+    const email = localStorage.getItem(EMAIL_STORAGE_KEY);
+    if (token && user && email) {
+        return { token, user, email };
+    } else {
+        return null;
+    }
 };
 
 /**
- * gets the authentication token from localStorage
- *
- * @returns {string | null} the token, or null if not found
+ * removes all auth from local storage
  */
-export const getToken = () => {
-    return localStorage.getItem(TOKEN_STORAGE_KEY);
-};
-
-/**
- * removes the authentication token from localStorage
- */
-export const removeToken = () => {
+export const removeAll = () => {
     localStorage.removeItem(TOKEN_STORAGE_KEY);
+    localStorage.removeItem(USERNAME_STORAGE_KEY);
+    localStorage.removeItem(EMAIL_STORAGE_KEY);
 };
 
 /**
- * add token to header
+ * add user info to local storage
  */
-export const setAxiosAuthToken = (token) => {
+export const storeUserInfo = (token, user, email) => {
+    localStorage.setItem(TOKEN_STORAGE_KEY, token);
+    localStorage.setItem(USERNAME_STORAGE_KEY, user);
+    localStorage.setItem(EMAIL_STORAGE_KEY, email);
+};
+
+export const setAxiosHeader = (token) => {
     axios.defaults.headers.common['Authorization'] = `Token ${token}`;
 };
 
+/**
+ * authenticates a user using their username and password
+ *
+ * @param {string} username - username
+ * @param {string} password - password
+ * @returns {Promise<object>} the user token and details
+ */
+export const authenticateUser = async (username, password) => {
+    try {
+        const response = await axios.post(
+            `${API_BASE_URL}/login/`,
+            { username, password },
+        );
+
+        const {
+            token,
+            user: { username: authUser, email: authEmail },
+        } = response.data;
+
+        storeUserInfo(token, authUser, authEmail);
+        setAxiosHeader(token);
+
+        return { token, authUser, authEmail };
+    } catch (error) {
+        console.error('Authentication failed:', error.response?.data || 'No response');
+        return { error: error.response?.data || 'No response' };
+    }
+};

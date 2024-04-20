@@ -1,10 +1,10 @@
 const config = {
     development: {
-        API_BASE_URL: "http://localhost:8000",
+        API_BASE_URL: 'http://localhost:8000',
     },
     production: {
-        API_BASE_URL: "http://moodtracker-api-load-balanacer-129190309.us-west-1.elb.amazonaws.com",
-    }
+        API_BASE_URL: 'http://moodtracker-api-load-balanacer-129190309.us-west-1.elb.amazonaws.com',
+    },
 };
 
 const ENV = process.env.NODE_ENV;

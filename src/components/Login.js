@@ -4,34 +4,30 @@
  * Sets up token auth with username/password
  */
 import React, { useContext, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { setAxiosAuthToken, setToken } from '../services/auth';
+import { authenticateUser } from '../services/auth';
 import { AuthContext } from '../contexts/AuthContext';
-import { API_BASE_URL } from '../config.js';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+
     const { setIsAuthenticated } = useContext(AuthContext);
+
     const navigate = useNavigate();
 
     const handleLogin = async (event) => {
         event.preventDefault();
         setLoading(true);
-        try {
-            const response = await axios.post(`${API_BASE_URL}/login/`, { username, password });
-            const { token } = response.data;
-            setToken(token);
-            setAxiosAuthToken(token);
+        const result = await authenticateUser(username, password);
+        if (!result.error) {
             setIsAuthenticated(true);
             navigate('/');
-        } catch (error) {
-            console.error('Login failed:', error.response?.data || 'No response');
-        } finally {
-            setLoading(false);
+        } else {
+            console.error('Login failed:', result.error);
         }
+        setLoading(false);
     };
 
     if (loading) {

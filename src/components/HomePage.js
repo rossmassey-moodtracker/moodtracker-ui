@@ -1,12 +1,37 @@
-/**
- * Component: HomePage
- *
- * Main page
- */
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import { clearAuthStorage } from '../services/auth';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/system';
+
+const HomeContainer = styled('div')(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh',
+    paddingTop: '50px',
+    backgroundColor: theme.palette.background.default,
+}));
+
+const AuthBar = styled('div')(({ theme }) => ({
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    backgroundColor: theme.palette.primary.dark,
+    color: theme.palette.primary.contrastText,
+    padding: '10px 20px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+}));
+
+const StyledLink = styled(RouterLink)(({ theme }) => ({
+    textDecoration: 'none',
+    color: theme.palette.primary.contrastText,
+}));
 
 const HomePage = () => {
     const { isAuthenticated, setIsAuthenticated, authenticatedUser } = useContext(AuthContext);
@@ -17,32 +42,43 @@ const HomePage = () => {
     };
 
     return (
-        <div>
-            <h1>Moodtracker</h1>
-            <p>This site lets you track your mood over time!</p>
-            {isAuthenticated ? (
-                <AuthenticatedView user={authenticatedUser} onLogout={handleLogout}/>
-            ) : (
-                <UnauthenticatedView/>
-            )}
-        </div>
+        <>
+            <AuthBar>
+                {isAuthenticated ? (
+                    <>
+                        <span>Logged in as {authenticatedUser}</span>
+                        <Button onClick={handleLogout} variant="contained" color="secondary">Log out</Button>
+                    </>
+                ) : (
+                    <>
+                        <span>You are not logged in</span>
+                        <StyledLink to="/login">
+                            <Button variant="contained" color="primary">Login here</Button>
+                        </StyledLink>
+                    </>
+                )}
+            </AuthBar>
+            <HomeContainer>
+                <h1>Moodtracker</h1>
+                <p>This site lets you track your mood over time!</p>
+                {isAuthenticated ? (
+                    <AuthenticatedView/>
+                ) : (
+                    <UnauthenticatedView/>
+                )}
+            </HomeContainer>
+        </>
     );
 };
 
-const AuthenticatedView = ({ user, onLogout }) => (
-    <div>
-        <p>You are logged in as {user}!</p>
-        <Link to="/moods">Moods</Link>
-        <div style={{ paddingTop: '10px' }}>
-            <button onClick={onLogout}>Log out</button>
-        </div>
-    </div>
+const AuthenticatedView = () => (
+    <StyledLink to="/moods">
+        <Button variant="contained" color="primary">Moods</Button>
+    </StyledLink>
 );
 
 const UnauthenticatedView = () => (
-    <div>
-        <p>You are not logged in, <Link to="/login">login here</Link></p>
-    </div>
+    <p>To start tracking your mood, please log in.</p>
 );
 
 export default HomePage;

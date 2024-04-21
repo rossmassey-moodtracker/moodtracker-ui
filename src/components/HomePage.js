@@ -7,6 +7,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/system';
+import { Typography } from '@mui/material';
 import AuthBar from './AuthBar';
 import StyledLink from './StyledLink';
 
@@ -27,8 +28,12 @@ const HomePage = () => {
         <>
             <AuthBar/>
             <HomeContainer>
-                <h1>Moodtracker</h1>
-                <p>This site lets you track your mood over time!</p>
+                <Typography component="h1" variant="h2" color="primary" gutterBottom>
+                    Moodtracker
+                </Typography>
+                <Typography variant="body1" paragraph>
+                    This site lets you track your mood over time!
+                </Typography>
                 {isAuthenticated ? (
                     <AuthenticatedView/>
                 ) : (
@@ -48,7 +53,9 @@ const AuthenticatedView = () => (
 );
 
 const UnauthenticatedView = () => (
-    <p>Please log in</p>
+    <Typography variant="body2" paragraph>
+        Please log in
+    </Typography>
 );
 
 export default HomePage;

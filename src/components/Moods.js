@@ -1,42 +1,23 @@
 /**
  * Component: Moods
  *
- * Lists all the user's logged moods
+ * Handles mood logic
  */
 import { useEffect, useState } from 'react';
-import { API_BASE_URL } from '../config.js';
 import axios from 'axios';
-
-/**
- * convert to readable date string
- *
- * @param {string} dateString - the ISO 8601 formatted date
- * @returns a more readable date
- */
-function formatTime(dateString) {
-    const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-    };
-    return new Date(dateString).toLocaleDateString('en-US', options);
-}
+import { API_BASE_URL } from '../config.js';
+import { Paper, Typography } from '@mui/material';
+import MoodsTable from './MoodsTable';
 
 function Moods() {
-    // initialize `moods` to empty array
     const [moods, setMoods] = useState([]);
+    const [newMood, setNewMood] = useState('');
 
     useEffect(() => {
-        /**
-         * call API for list of user's moods
-         */
         const fetchMoods = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/api/moods/`);
-
+                const response = await axios.get(
+                    `${API_BASE_URL}/api/moods/`);
                 if (response.status === 200) {
                     setMoods(response.data.results);
                 }
@@ -48,13 +29,32 @@ function Moods() {
         fetchMoods();
     }, []);
 
+    const handleMoodChange = (event) => {
+        setNewMood(event.target.value);
+    };
+
+    const handleMoodSubmit = async () => {
+        try {
+            const response = await axios.post(
+                `${API_BASE_URL}/api/moods/`,
+                { mood: newMood });
+            if (response.status === 201) {
+                setMoods([...moods, response.data]); // insert new mood
+                setNewMood(''); // clear input field
+            }
+        } catch (error) {
+            console.error('Failed to post new mood:', error.message);
+        }
+    };
+
     return (
-        <div>
-            <h1>Moods</h1>
-            {moods.map(mood => (
-                <div key={mood.id}>{formatTime(mood.time)}: {mood.mood}</div>
-            ))}
-        </div>
+        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <Typography variant="h4" sx={{ m: 2 }}>Moods</Typography>
+            <MoodsTable moods={moods}
+                        newMood={newMood}
+                        onMoodChange={handleMoodChange}
+                        onMoodSubmit={handleMoodSubmit}/>
+        </Paper>
     );
 }
 

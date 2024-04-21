@@ -11,18 +11,18 @@ const PrivateRoute = ({ children }) => {
     const { isAuthenticated, tokenLoading } = useContext(AuthContext);
     const location = useLocation();
 
-    console.log(tokenLoading);
-    console.log(isAuthenticated);
+    console.log(`Checking credentials for ${location.pathname}`);
 
     if (tokenLoading) {
         return <div>Checking credentials...</div>;
     }
 
     if (!isAuthenticated) {
-        console.log(`NOT AUTHORIZED TO ACCESS ${location.pathname}`);
+        console.warn('NOT AUTHORIZED, REDIRECTING TO LOGIN');
         return <Navigate to="/login" state={{ from: location }} replace/>;
     }
 
+    console.log('AUTHORIZED');
     return children;
 };
 
